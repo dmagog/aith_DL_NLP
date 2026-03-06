@@ -1,0 +1,12 @@
+{
+  "count_logreg": {
+    "accuracy": 0.8179,
+    "macro_f1": 0.6176586462583461,
+    "train_seconds": 878.6446802910068
+  },
+  "tfidf_logreg": {
+    "accuracy": 0.80665,
+    "macro_f1": 0.5253926983746421,
+    "train_seconds": 102.26281875000132
+  }
+}

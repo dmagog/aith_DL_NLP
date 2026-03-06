@@ -1,0 +1,15 @@
+{
+  "best_score_cv_macro_f1": 0.565223271612849,
+  "best_params": {
+    "vectorizer__ngram_range": [
+      1,
+      1
+    ],
+    "vectorizer__min_df": 3,
+    "vectorizer__max_features": 120000,
+    "vectorizer__max_df": 1.0,
+    "classifier__max_iter": 700,
+    "classifier__class_weight": "balanced",
+    "classifier__C": 0.02171911402017425
+  }
+}

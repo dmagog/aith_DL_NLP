@@ -1,0 +1,12 @@
+{
+  "most_frequent": {
+    "accuracy": 0.2171,
+    "macro_f1": 0.018776297411015833,
+    "train_seconds": 0.004783333002706058
+  },
+  "stratified": {
+    "accuracy": 0.1222,
+    "macro_f1": 0.05327080483571356,
+    "train_seconds": 0.0022650829996564426
+  }
+}

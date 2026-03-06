@@ -1,0 +1,4 @@
+{
+  "train_size_full": 60000,
+  "train_size_for_tuning": 30000
+}

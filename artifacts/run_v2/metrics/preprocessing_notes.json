@@ -1,0 +1,9 @@
+{
+  "pipeline": [
+    "merge title and text",
+    "lowercase",
+    "remove non-alphanumeric chars (including punctuation)",
+    "normalize spaces"
+  ],
+  "motivation": "This preprocessing is intentionally lightweight for speed on 100k documents. Vectorizers with n-grams capture lexical patterns, while avoiding expensive lemmatization keeps runtime practical."
+}
