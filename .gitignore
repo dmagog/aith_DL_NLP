@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+artifacts/
+artifacts_hw2/
+data/*.csv.gz
+data/*.csv.bz2
+data/*.csv
+data/embeddings/
+src/__pycache__/
+results_summary.md
+tasklist.md
