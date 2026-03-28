@@ -1,0 +1,20 @@
+{
+  "dataset_config_name": null,
+  "dataset_name": "gusevski/factrueval2016",
+  "label_column": "ner_tags",
+  "label_names": [
+    "O",
+    "B-PER",
+    "I-PER",
+    "B-ORG",
+    "I-ORG",
+    "B-LOC",
+    "I-LOC"
+  ],
+  "splits": {
+    "test": 2582,
+    "train": 7746,
+    "validation": 2582
+  },
+  "token_column": "tokens"
+}
