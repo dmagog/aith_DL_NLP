@@ -1,0 +1,19 @@
+{
+  "batch_size": 16,
+  "command": "pseudo-label",
+  "max_samples": 10000,
+  "max_text_chars": null,
+  "output_path": "artifacts_hw3/pseudo_lenta_titles_10k.jsonl",
+  "saved_rows": 7761,
+  "seed": 42,
+  "source_dataset_config_name": null,
+  "source_dataset_name": "data-silence/lenta.ru_2-extended",
+  "source_split": "train[:10000]",
+  "supported_labels": [
+    "LOC",
+    "ORG",
+    "PER"
+  ],
+  "teacher_model": "/tmp/teacher_r1char9",
+  "text_column": "title"
+}

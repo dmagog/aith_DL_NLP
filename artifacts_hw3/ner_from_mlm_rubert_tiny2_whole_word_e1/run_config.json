@@ -1,0 +1,48 @@
+{
+  "cache_dir": "data/cache",
+  "command": "train-ner",
+  "dataset_config_name": null,
+  "dataset_name": "gusevski/factrueval2016",
+  "device": "cpu",
+  "learning_rate": 3e-05,
+  "max_length": 128,
+  "max_test_samples": null,
+  "max_train_samples": null,
+  "max_validation_samples": null,
+  "metrics": {
+    "after_finetuning": {
+      "epoch": 1.0,
+      "test_after_accuracy": 0.9617792234809085,
+      "test_after_f1": 0.7487250410579999,
+      "test_after_loss": 0.1424536406993866,
+      "test_after_model_preparation_time": 0.0004,
+      "test_after_precision": 0.7102328632338472,
+      "test_after_recall": 0.7916285870955949,
+      "test_after_runtime": 3.8479,
+      "test_after_samples_per_second": 671.017,
+      "test_after_steps_per_second": 21.05
+    },
+    "before_finetuning": {
+      "test_before_accuracy": 0.10995328781890047,
+      "test_before_f1": 0.032230566267505575,
+      "test_before_loss": 1.9935768842697144,
+      "test_before_model_preparation_time": 0.0004,
+      "test_before_precision": 0.018128267768670516,
+      "test_before_recall": 0.14512886126850666,
+      "test_before_runtime": 4.5213,
+      "test_before_samples_per_second": 571.071,
+      "test_before_steps_per_second": 17.915
+    },
+    "eval_split": "validation",
+    "test_split": "test",
+    "train_split": "train"
+  },
+  "model_name_or_path": "artifacts_hw3/mlm_rubert_tiny2_whole_word_e1/checkpoint-best",
+  "num_train_epochs": 1.0,
+  "output_dir": "artifacts_hw3/ner_from_mlm_rubert_tiny2_whole_word_e1",
+  "per_device_eval_batch_size": 32,
+  "per_device_train_batch_size": 16,
+  "seed": 42,
+  "synthetic_path": null,
+  "weight_decay": 0.01
+}

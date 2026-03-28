@@ -1,0 +1,28 @@
+{
+  "cache_dir": "data/cache",
+  "command": "train-mlm",
+  "dataset_config_name": null,
+  "dataset_name": "gusevski/factrueval2016",
+  "device": "cpu",
+  "learning_rate": 5e-05,
+  "masking_strategy": "entity",
+  "max_length": 128,
+  "max_test_samples": null,
+  "max_train_samples": null,
+  "max_validation_samples": null,
+  "metrics": {
+    "epoch": 1.0,
+    "eval_loss": 4.661438941955566,
+    "eval_runtime": 53.5351,
+    "eval_samples_per_second": 48.23,
+    "eval_steps_per_second": 1.513
+  },
+  "mlm_probability": 0.15,
+  "model_name_or_path": "cointegrated/rubert-tiny2",
+  "num_train_epochs": 1.0,
+  "output_dir": "artifacts_hw3/mlm_rubert_tiny2_entity_e1",
+  "per_device_eval_batch_size": 32,
+  "per_device_train_batch_size": 16,
+  "seed": 42,
+  "weight_decay": 0.01
+}

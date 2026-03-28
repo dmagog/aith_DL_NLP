@@ -1,0 +1,28 @@
+{
+  "after_finetuning": {
+    "epoch": 1.0,
+    "test_after_accuracy": 0.9604743083003953,
+    "test_after_f1": 0.7367425870219168,
+    "test_after_loss": 0.15209119021892548,
+    "test_after_model_preparation_time": 0.0004,
+    "test_after_precision": 0.6953277092796886,
+    "test_after_recall": 0.7834033997441053,
+    "test_after_runtime": 4.68,
+    "test_after_samples_per_second": 551.713,
+    "test_after_steps_per_second": 17.308
+  },
+  "before_finetuning": {
+    "test_before_accuracy": 0.10297482837528604,
+    "test_before_f1": 0.031769709919970975,
+    "test_before_loss": 1.9980082511901855,
+    "test_before_model_preparation_time": 0.0004,
+    "test_before_precision": 0.017853906108392242,
+    "test_before_recall": 0.1440321696216414,
+    "test_before_runtime": 5.3197,
+    "test_before_samples_per_second": 485.37,
+    "test_before_steps_per_second": 15.227
+  },
+  "eval_split": "validation",
+  "test_split": "test",
+  "train_split": "train"
+}
