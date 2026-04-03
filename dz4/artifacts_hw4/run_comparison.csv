@@ -1,0 +1,7 @@
+run_name,preset,encoder_name,n_documents,n_topics,outlier_share,topic_diversity,umass_coherence,runtime_seconds,practical_candidate
+baseline_multilingual_3k,baseline_multilingual,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,3000,10,0.25533333333333336,0.91,-3.243432111074226,166.00321006774902,True
+lemmatized_multilingual_3k,lemmatized_multilingual,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,3000,7,0.276,1.0,-3.8218689864638296,221.5776538848877,True
+final_baseline_multilingual_6k_tuned,baseline_multilingual,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,6000,2,0.006666666666666667,1.0,-2.0882435767495418,255.09686493873596,False
+final_baseline_multilingual_6k,baseline_multilingual,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,6000,2,0.007166666666666667,1.0,-2.0949997988739306,256.7705819606781,False
+english_ablation_3k,english_ablation,sentence-transformers/all-MiniLM-L6-v2,3000,2,0.034666666666666665,1.0,-10.162806433020808,128.9536361694336,False
+smoke_fit,baseline_multilingual,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,200,0,1.0,0.0,,17.152528762817383,False

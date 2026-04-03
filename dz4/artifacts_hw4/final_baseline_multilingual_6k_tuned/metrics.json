@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-04-03T10:21:44+00:00",
+  "preset": "baseline_multilingual",
+  "encoder_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "effective_nr_topics": null,
+  "n_documents": 6000,
+  "n_topics_excluding_outliers": 2,
+  "outlier_share": 0.006666666666666667,
+  "median_topic_size": 2980.0,
+  "largest_topic_size": 5709,
+  "topic_diversity_top_n": 1.0,
+  "umass_coherence_top_n": -2.0882435767495418,
+  "runtime_seconds": 255.09686493873596
+}

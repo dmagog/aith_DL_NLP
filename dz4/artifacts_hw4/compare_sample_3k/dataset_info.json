@@ -1,0 +1,53 @@
+{
+  "created_at": "2026-04-03T09:56:57+00:00",
+  "data_path": "../data/lenta-ru-news.csv.bz2",
+  "seed": 42,
+  "requested_sample_size": 3000,
+  "sample_size": 3000,
+  "max_records": null,
+  "scanned_records": 800975,
+  "kept_records_after_filters": 799822,
+  "filtered_records": {
+    "excluded_topic": 65,
+    "too_short": 1088
+  },
+  "excluded_topics": [
+    "Библиотека"
+  ],
+  "topic_counts_after_filters_top20": {
+    "Россия": 160102,
+    "Мир": 136337,
+    "Экономика": 79472,
+    "Спорт": 64398,
+    "UNKNOWN": 61994,
+    "Культура": 53778,
+    "Бывший СССР": 53382,
+    "Наука и техника": 52860,
+    "Интернет и СМИ": 44624,
+    "Из жизни": 27577,
+    "Дом": 21734,
+    "Силовые структуры": 19596,
+    "Ценности": 7766,
+    "Бизнес": 7399,
+    "Путешествия": 6408,
+    "69-я параллель": 1268,
+    "Крым": 666,
+    "Культпросвет": 340,
+    "Легпром": 114,
+    "Оружие": 3
+  },
+  "topic_count_after_filters": 23,
+  "document_length_stats": {
+    "count": 799822.0,
+    "mean": 1128.6366891633388,
+    "std": 198.8635382687412,
+    "min": 80.0,
+    "10%": 821.0,
+    "50%": 1244.0,
+    "90%": 1270.0,
+    "99%": 1281.0,
+    "max": 1334.0
+  },
+  "prepared_corpus_path": "artifacts_hw4/compare_sample_3k/prepared_corpus_sample.csv",
+  "preview_path": "artifacts_hw4/compare_sample_3k/dataset_preview.txt"
+}

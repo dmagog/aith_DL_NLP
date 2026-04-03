@@ -1,0 +1,10 @@
+# HW4 BERTopic Runs
+
+| run_name                             | preset                  | encoder_name                                                |   n_documents |   n_topics |   outlier_share |   topic_diversity |   umass_coherence |   runtime_seconds | practical_candidate   |
+|:-------------------------------------|:------------------------|:------------------------------------------------------------|--------------:|-----------:|----------------:|------------------:|------------------:|------------------:|:----------------------|
+| baseline_multilingual_3k             | baseline_multilingual   | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 |          3000 |         10 |      0.255333   |              0.91 |          -3.24343 |          166.003  | True                  |
+| lemmatized_multilingual_3k           | lemmatized_multilingual | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 |          3000 |          7 |      0.276      |              1    |          -3.82187 |          221.578  | True                  |
+| final_baseline_multilingual_6k_tuned | baseline_multilingual   | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 |          6000 |          2 |      0.00666667 |              1    |          -2.08824 |          255.097  | False                 |
+| final_baseline_multilingual_6k       | baseline_multilingual   | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 |          6000 |          2 |      0.00716667 |              1    |          -2.095   |          256.771  | False                 |
+| english_ablation_3k                  | english_ablation        | sentence-transformers/all-MiniLM-L6-v2                      |          3000 |          2 |      0.0346667  |              1    |         -10.1628  |          128.954  | False                 |
+| smoke_fit                            | baseline_multilingual   | sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 |           200 |          0 |      1          |              0    |         nan       |           17.1525 | False                 |

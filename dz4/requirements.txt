@@ -1,0 +1,14 @@
+bertopic>=0.17
+corus==0.10.0
+gensim>=4.3
+hdbscan>=0.8
+jupyter>=1.0
+numpy>=1.26,<2.0
+pandas>=2.2,<3.0
+plotly>=5.24
+pymorphy3>=2.0
+scikit-learn>=1.5,<1.7
+scipy>=1.11,<1.14
+sentence-transformers>=3.0
+tqdm>=4.66
+umap-learn>=0.5
