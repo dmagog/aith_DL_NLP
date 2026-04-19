@@ -1,0 +1,8 @@
+transformers>=4.45
+datasets>=2.20
+peft>=0.12
+accelerate>=0.34
+bitsandbytes>=0.43
+sentencepiece>=0.2
+corus>=0.10
+lm-eval>=0.4.5

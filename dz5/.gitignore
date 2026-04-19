@@ -1,0 +1,25 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+*.log
+
+# Колаб может сложить эти файлы рядом с dz5/; не коммитим
+*.csv.bz2
+*.zip
+
+# Тяжёлое из тренировок/профайлера — не коммитим
+artifacts_hw5/trainer/
+artifacts_hw5/profile_trainer/
+artifacts_hw5/**/checkpoints/
+artifacts_hw5/**/runs/
+artifacts_hw5/**/trace*.json
+artifacts_hw5/**/trace*.json.gz
+artifacts_hw5/profiler_trace/
+artifacts_hw5/**/*.pt
+artifacts_hw5/**/*.bin
+artifacts_hw5/**/*.gz
+
+# Sample из Lenta воспроизводится детерминированно по seed — в git не тащим
+artifacts_hw5/sample/*.csv

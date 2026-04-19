@@ -1,0 +1,20 @@
+{
+  "stage": "after",
+  "perplexity": 4.86061600754759,
+  "harness": {
+    "xnli_ru": {
+      "acc,none": 0.465,
+      "acc_stderr,none": 0.035357115664894155
+    },
+    "xwinograd_ru": {
+      "acc,none": 0.62,
+      "acc_stderr,none": 0.03440813273035824
+    }
+  },
+  "harness_tasks": [
+    "xnli_ru",
+    "xwinograd_ru"
+  ],
+  "harness_limit": 200,
+  "perplexity_samples": 200
+}
