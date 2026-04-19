@@ -10,14 +10,15 @@ __pycache__/
 *.zip
 
 # Тяжёлое из тренировок/профайлера — не коммитим
+artifacts_hw5/trainer/
 artifacts_hw5/**/checkpoints/
 artifacts_hw5/**/runs/
 artifacts_hw5/**/trace*.json
 artifacts_hw5/**/trace*.json.gz
-artifacts_hw5/**/profiler_trace/
+artifacts_hw5/profiler_trace/
 artifacts_hw5/**/*.pt
 artifacts_hw5/**/*.bin
 artifacts_hw5/**/*.gz
 
-# Локальный sample датасета не уходит в git
-artifacts_hw5/**/lenta_sample.csv
+# Sample из Lenta воспроизводится детерминированно по seed — в git не тащим
+artifacts_hw5/sample/*.csv

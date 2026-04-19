@@ -186,7 +186,7 @@ def train_qlora(
         gradient_checkpointing=True,
         seed=cfg.seed,
         data_seed=cfg.seed,
-        dataloader_num_workers=2,
+        dataloader_num_workers=0,
     )
 
     collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)

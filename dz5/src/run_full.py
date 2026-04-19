@@ -117,6 +117,7 @@ def main() -> None:
     harness_tasks = DEFAULT_HARNESS_TASKS
 
     if not args.skip_baseline:
+        print("[run_full] stage=baseline start", flush=True)
         model, tokenizer = load_base_model(train_cfg.model_name, train_cfg.seed)
         _evaluate_stage(
             model, tokenizer, eval_df, out, stage="before",
@@ -124,9 +125,11 @@ def main() -> None:
             perplexity_samples=args.perplexity_samples, gen_cfg=gen_cfg,
         )
         _free(model)
+        print("[run_full] stage=baseline done", flush=True)
 
     adapter_dir = out / "lora_adapter"
     if not args.skip_train:
+        print("[run_full] stage=train start", flush=True)
         train_qlora(
             train_df=train_df,
             eval_df=eval_df,
@@ -134,8 +137,10 @@ def main() -> None:
             output_dir=out,
             profiler_trace_dir=out / "profiler_trace",
         )
+        print("[run_full] stage=train done", flush=True)
 
     if not args.skip_post:
+        print("[run_full] stage=post start", flush=True)
         model, tokenizer = _load_adapter(train_cfg.model_name, adapter_dir, train_cfg.seed)
         _evaluate_stage(
             model, tokenizer, eval_df, out, stage="after",
@@ -143,6 +148,7 @@ def main() -> None:
             perplexity_samples=args.perplexity_samples, gen_cfg=gen_cfg,
         )
         _free(model)
+        print("[run_full] stage=post done", flush=True)
 
     summary = {
         "sample": json.loads((sample_dir / "dataset_info.json").read_text(encoding="utf-8")),
