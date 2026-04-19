@@ -280,6 +280,18 @@ def train_full_run(
     model.save_pretrained(str(adapter_dir))
     tokenizer.save_pretrained(str(adapter_dir))
 
+    # HF Trainer пишет log_history в trainer_state.json только внутри checkpoint-*/;
+    # сам trainer_dir/ у нас под .gitignore, поэтому выдёргиваем кривую loss-а
+    # в отдельный лёгкий артефакт, чтобы отчётный ноутбук мог её построить.
+    log_payload = {
+        "global_step": trainer.state.global_step,
+        "epoch": trainer.state.epoch,
+        "log_history": trainer.state.log_history,
+    }
+    (output_dir / "train_log_history.json").write_text(
+        json.dumps(log_payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
     metrics = {
         "train_loss": result.metrics.get("train_loss"),
         "train_runtime_sec": result.metrics.get("train_runtime"),

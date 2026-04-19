@@ -1,0 +1,9 @@
+{
+  "train_loss": 1.5730173140142492,
+  "train_runtime_sec": 2429.8963,
+  "train_samples_per_second": 2.366,
+  "num_train_epochs": 0.5,
+  "max_seq_length": 384,
+  "effective_batch_size": 8,
+  "resumed_from": null
+}
