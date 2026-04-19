@@ -1,12 +1,7 @@
-"""Полный прогон HW5: подготовка данных, baseline, QLoRA, post-train, артефакты.
+"""Полный прогон HW5: подготовка данных, baseline, profile, QLoRA, post-train, артефакты.
 
 Запуск (в Colab или на любой CUDA-машине):
-    python -m src.run_full \
-        --corpus-path /path/to/lenta-ru-news.csv.bz2 \
-        --out artifacts_hw5
-
-Все долгие шаги делаются один раз; ноутбук `hw5.ipynb` потом читает артефакты
-без повторной тренировки.
+    python -m src.run_full --corpus-path <lenta.bz2> --out artifacts_hw5
 """
 from __future__ import annotations
 
@@ -27,11 +22,17 @@ from .evaluate import (
     run_harness,
     save_json,
 )
-from .train import TrainConfig, load_base_model, train_qlora
+from .train import (
+    TrainConfig,
+    load_base_model,
+    profile_short_run,
+    train_full_run,
+)
 
 
-def _free(obj) -> None:
-    del obj
+def _free(obj=None) -> None:
+    if obj is not None:
+        del obj
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -84,11 +85,12 @@ def main() -> None:
     parser.add_argument("--eval-size", type=int, default=500)
     parser.add_argument("--text-char-limit", type=int, default=600)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--harness-limit", type=int, default=200,
-                        help="Limit per harness task (None = full); по умолчанию 200 для скорости.")
+    parser.add_argument("--harness-limit", type=int, default=200)
     parser.add_argument("--perplexity-samples", type=int, default=200)
-    parser.add_argument("--num-train-epochs", type=float, default=1.0)
+    parser.add_argument("--num-train-epochs", type=float, default=None)
+    parser.add_argument("--max-seq-length", type=int, default=None)
     parser.add_argument("--skip-baseline", action="store_true")
+    parser.add_argument("--skip-profile", action="store_true")
     parser.add_argument("--skip-train", action="store_true")
     parser.add_argument("--skip-post", action="store_true")
     args = parser.parse_args()
@@ -106,13 +108,20 @@ def main() -> None:
     train_csv = sample_dir / "train.csv"
     eval_csv = sample_dir / "eval.csv"
     if not train_csv.exists() or not eval_csv.exists():
+        print("[run_full] stage=sample start", flush=True)
         train_df, eval_df = prepare_lenta_sample(args.corpus_path, sample_cfg)
         save_sample(train_df, eval_df, sample_dir, sample_cfg)
+        print("[run_full] stage=sample done", flush=True)
     else:
         train_df = pd.read_csv(train_csv)
         eval_df = pd.read_csv(eval_csv)
 
-    train_cfg = TrainConfig(num_train_epochs=args.num_train_epochs, seed=args.seed)
+    overrides = {}
+    if args.num_train_epochs is not None:
+        overrides["num_train_epochs"] = args.num_train_epochs
+    if args.max_seq_length is not None:
+        overrides["max_seq_length"] = args.max_seq_length
+    train_cfg = TrainConfig(seed=args.seed, **overrides)
     gen_cfg = GenerationConfig(seed=args.seed)
     harness_tasks = DEFAULT_HARNESS_TASKS
 
@@ -124,19 +133,19 @@ def main() -> None:
             harness_tasks=harness_tasks, harness_limit=args.harness_limit,
             perplexity_samples=args.perplexity_samples, gen_cfg=gen_cfg,
         )
-        _free(model)
+        del model, tokenizer
+        _free()
         print("[run_full] stage=baseline done", flush=True)
+
+    if not args.skip_profile:
+        print("[run_full] stage=profile start", flush=True)
+        profile_short_run(train_df, train_cfg, out)
+        print("[run_full] stage=profile done", flush=True)
 
     adapter_dir = out / "lora_adapter"
     if not args.skip_train:
         print("[run_full] stage=train start", flush=True)
-        train_qlora(
-            train_df=train_df,
-            eval_df=eval_df,
-            cfg=train_cfg,
-            output_dir=out,
-            profiler_trace_dir=out / "profiler_trace",
-        )
+        train_full_run(train_df=train_df, eval_df=eval_df, cfg=train_cfg, output_dir=out)
         print("[run_full] stage=train done", flush=True)
 
     if not args.skip_post:
@@ -147,19 +156,23 @@ def main() -> None:
             harness_tasks=harness_tasks, harness_limit=args.harness_limit,
             perplexity_samples=args.perplexity_samples, gen_cfg=gen_cfg,
         )
-        _free(model)
+        del model, tokenizer
+        _free()
         print("[run_full] stage=post done", flush=True)
 
-    summary = {
-        "sample": json.loads((sample_dir / "dataset_info.json").read_text(encoding="utf-8")),
-        "before": json.loads((out / "metrics_before.json").read_text(encoding="utf-8"))
-        if (out / "metrics_before.json").exists() else None,
-        "after": json.loads((out / "metrics_after.json").read_text(encoding="utf-8"))
-        if (out / "metrics_after.json").exists() else None,
-        "train": json.loads((out / "train_metrics.json").read_text(encoding="utf-8"))
-        if (out / "train_metrics.json").exists() else None,
-    }
-    save_json(summary, out / "run_summary.json")
+    summary_parts: dict = {}
+    info_path = sample_dir / "dataset_info.json"
+    if info_path.exists():
+        summary_parts["sample"] = json.loads(info_path.read_text(encoding="utf-8"))
+    for key, fname in (
+        ("before", "metrics_before.json"),
+        ("after", "metrics_after.json"),
+        ("train", "train_metrics.json"),
+    ):
+        p = out / fname
+        if p.exists():
+            summary_parts[key] = json.loads(p.read_text(encoding="utf-8"))
+    save_json(summary_parts, out / "run_summary.json")
 
 
 if __name__ == "__main__":
