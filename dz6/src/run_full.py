@@ -253,7 +253,27 @@ def stage_dpo_train(out_dir: Path, seed: int) -> dict:
 # CLI
 # ---------------------------------------------------------------------------
 
+def _log_env_diagnostics() -> None:
+    """Первые строчки `main()`: печатаем encoding/locale.
+    Если `PYTHONUTF8=1` не долетел — это сразу видно в логе."""
+    import locale as _locale
+    import sys as _sys
+    print(
+        "[env] python=%s stdout=%s stderr=%s fs=%s locale=%s utf8_mode=%s"
+        % (
+            _sys.version.split()[0],
+            _sys.stdout.encoding,
+            _sys.stderr.encoding,
+            _sys.getfilesystemencoding(),
+            _locale.getpreferredencoding(False),
+            _sys.flags.utf8_mode,
+        ),
+        flush=True,
+    )
+
+
 def main() -> None:
+    _log_env_diagnostics()
     p = argparse.ArgumentParser()
     p.add_argument("--out", type=Path, default=Path("artifacts_hw6"))
     p.add_argument("--model", type=str, default="Qwen/Qwen2.5-1.5B-Instruct")
