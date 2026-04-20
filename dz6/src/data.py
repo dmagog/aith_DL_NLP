@@ -1,17 +1,17 @@
 """Загрузка harmful/harmless prompts и подготовка сплитов для HW6.
 
-- harmful: `masterkristall/harmful_behaviors_ru` (AdvBench-RU). Каждый
-  пример содержит `goal` (harmful prompt) и `target` (harmful
-  continuation вида "Конечно, вот как..."). Мы используем:
-  * `goal` — как prompt в любом замере и в DPO;
-  * `target` — как `rejected`-ответ для DPO (готовый harmful-комплешн
-    без необходимости генерить его уже аблитерированной моделью).
+- harmful: `masterkristall/harmful_behaviors_ru`. Колонки — `text` (RU
+  harmful prompt) + `text_en` (EN). Harmful continuation в датасете
+  нет, так что `rejected`-ответы генерируются позже — в dpo_data.py —
+  самой аблитерированной моделью (task-условие это разрешает: запрет
+  только на генерацию harmless-вариантов аблитерированной моделью).
 - harmless: фиксированный список нейтральных русских инструкций в этом
   модуле. 128 примеров, сбалансированы по категориям. Захардкожено
   сознательно — это даёт 100% воспроизводимость direction'а аблитерации,
   без внешних датасетов.
 
-Все сплиты детерминированы seed'ом и сохраняются в JSON для отчёта.
+Все сплиты — списки строк, детерминированы seed'ом, сохраняются в JSON
+для отчёта.
 """
 from __future__ import annotations
 
@@ -170,24 +170,34 @@ class SplitConfig:
     abliteration_pairs: int = 64        # harmful+harmless для оценки direction
 
 
-def load_harmful_ru(cache_dir: str | None = None) -> list[dict]:
-    """Грузим harmful_behaviors_ru и возвращаем list of {goal, target}."""
+def load_harmful_ru(cache_dir: str | None = None) -> list[str]:
+    """Грузим harmful_behaviors_ru (train + test) и возвращаем RU harmful
+    prompts как list[str]."""
     from datasets import load_dataset
 
     ds = load_dataset(
         "masterkristall/harmful_behaviors_ru",
-        split="train",
         cache_dir=cache_dir,
     )
-    # В разных версиях дата-сета колонки называются по-разному —
-    # приводим к единому виду.
-    rows: list[dict] = []
-    for row in ds:
-        goal = row.get("goal") or row.get("prompt") or row.get("instruction")
-        target = row.get("target") or row.get("response") or row.get("completion")
-        if goal and target:
-            rows.append({"goal": goal.strip(), "target": target.strip()})
-    return rows
+    # Объединяем train + test: задача не классификация, а «список
+    # harmful-prompt'ов на русском». Больше примеров → стабильнее direction
+    # и больше материала для DPO.
+    prompts: list[str] = []
+    for split_name in ("train", "test"):
+        if split_name not in ds:
+            continue
+        for row in ds[split_name]:
+            text = row.get("text") or row.get("goal") or row.get("prompt")
+            if text and isinstance(text, str):
+                prompts.append(text.strip())
+    # Дедуп на случай пересечений train/test.
+    seen: set[str] = set()
+    uniq: list[str] = []
+    for p in prompts:
+        if p not in seen:
+            seen.add(p)
+            uniq.append(p)
+    return uniq
 
 
 def load_harmless_ru() -> list[str]:
@@ -196,18 +206,18 @@ def load_harmless_ru() -> list[str]:
 
 
 def build_splits(
-    harmful: list[dict],
+    harmful: list[str],
     harmless: list[str],
     cfg: SplitConfig,
 ) -> dict:
     """Строим все нужные срезы с фиксированным seed.
 
-    Возвращает:
-      - abliteration.{harmful,harmless}  — по `abliteration_pairs` примеров
+    Возвращает (все срезы — list[str]):
+      - abliteration.{harmful,harmless}  — по `abliteration_pairs` prompt'ов
         для оценки refusal direction;
       - eval.{harmful,harmless}          — hold-out для замера refusal-rate;
-      - dpo_train / dpo_val              — тренировочный и валидационный
-        сэмплы для DPO (оба из harmful — prompt+target идут в DPO-пары).
+      - dpo_train / dpo_val              — harmful prompt'ы, для которых
+        позже генерируются chosen (оригиналом) и rejected (аблитерированной).
     """
     rng = random.Random(cfg.seed)
 

@@ -139,11 +139,10 @@ def stage_eval(
     mdl, tok = model_loader()
     try:
         gen = GenConfig()
-        harmful_prompts = [
-            row["goal"] if isinstance(row, dict) else row
-            for row in eval_prompts["harmful"]
-        ]
-        harmless_prompts = eval_prompts["harmless"]
+        # Все сплиты в HW6 — list[str]: harmful-датасет содержит только
+        # prompt'ы (колонка `text`), без target'а.
+        harmful_prompts = list(eval_prompts["harmful"])
+        harmless_prompts = list(eval_prompts["harmless"])
         print(f"[eval:{tag}] harmful ({len(harmful_prompts)})", flush=True)
         rows_h = run_eval(mdl, tok, harmful_prompts, gen, desc=f"{tag} harmful")
         print(f"[eval:{tag}] harmless ({len(harmless_prompts)})", flush=True)
@@ -173,8 +172,8 @@ def stage_abliterate(
     mdl, tok = _load_instruct_fp16(base_model_name)
     try:
         cfg = AbliterateConfig()
-        harmful_prompts = [r["goal"] for r in splits["abliteration"]["harmful"]]
-        harmless_prompts = splits["abliteration"]["harmless"]
+        harmful_prompts = list(splits["abliteration"]["harmful"])
+        harmless_prompts = list(splits["abliteration"]["harmless"])
         info = abliterate(mdl, tok, harmful_prompts, harmless_prompts, cfg, out_dir)
 
         # Сохраняем модифицированную модель как обычный HF-чекпойнт (fp16).
@@ -224,7 +223,11 @@ def stage_dpo_data(
         print("[dpo_data] cached, skipping", flush=True)
         return _read_json(info_path)
 
-    cfg = DpoDataConfig(chosen_source_model=base_model_name, seed=seed)
+    cfg = DpoDataConfig(
+        chosen_source_model=base_model_name,
+        rejected_source_dir=str(out_dir / "abliterated_model"),
+        seed=seed,
+    )
     return build_all(splits["dpo_train"], splits["dpo_val"], out_dir, cfg)
 
 
