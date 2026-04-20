@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.ipynb_checkpoints/
+
+# Cache данных/моделей и промежуточные файлы, которые не нужны в git.
+# Аблитерированная модель пушится в HF Hub, а не коммитится.
+hf_cache/
+data_cache/
+.env
+.env.local
+
+# HF Trainer пишет чекпойнты сюда; мы сохраняем только итоговый LoRA-адаптер
+# и train_log_history в artifacts_hw6/.
+artifacts_hw6/trainer/
+artifacts_hw6/profiler_trace/
+
+# Полный веc аблитерированной модели (~3 ГБ в fp16) — тоже не в git.
+artifacts_hw6/abliterated_model/
