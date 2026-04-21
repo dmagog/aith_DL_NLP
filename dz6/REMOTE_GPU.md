@@ -46,7 +46,7 @@ C:\Users\Georgy\miniconda3\envs\dz6-hw6\python.exe -m pip install -U pip
 C:\Users\Georgy\miniconda3\envs\dz6-hw6\python.exe -m pip install `
     --index-url https://download.pytorch.org/whl/cu121 torch
 C:\Users\Georgy\miniconda3\envs\dz6-hw6\python.exe -m pip install `
-    -r C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz_1\dz6\requirements.txt
+    -r C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6\requirements.txt
 ```
 
 Проверка:
@@ -77,7 +77,7 @@ PowerShell, чтобы Scheduled Task её увидел.
 
 ## 3. Scheduled Task DZ6Full
 
-Все скрипты лежат в `dz_1/dz6/scripts/`.
+Все скрипты лежат в `dz6/scripts/`.
 
 | Файл                           | Что делает                                         |
 | ------------------------------ | -------------------------------------------------- |
@@ -94,7 +94,7 @@ PowerShell, чтобы Scheduled Task её увидел.
 Один раз:
 
 ```powershell
-cd C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz_1\dz6\scripts
+cd C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6\scripts
 powershell -NoProfile -ExecutionPolicy Bypass -File .\register_dz6_full_task.ps1
 ```
 
@@ -117,7 +117,7 @@ powershell -NoProfile -File .\stop_dz6_full.ps1
 одиночные (иначе zsh съест). Путь к скриптам — в одну строку.
 
 ```bash
-RPATH='C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz_1\dz6\scripts'
+RPATH='C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6\scripts'
 SSH="ssh -i ~/.ssh/id_ed25519_dz5_gpu georgy@100.121.5.55"
 
 # старт
@@ -133,14 +133,14 @@ $SSH "powershell -NoProfile -File $RPATH\\stop_dz6_full.ps1"
 ## 4. Выгрузка артефактов
 
 После завершения прогона артефакты лежат в
-`C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz_1\dz6\artifacts_hw6\`.
+`C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6\artifacts_hw6\`.
 Нужны только лёгкие артефакты — веса и датасеты не тянем, они
 восстанавливаются с HF Hub / скриптом.
 
 На ремоте:
 
 ```powershell
-cd C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz_1\dz6
+cd C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6
 $exclude = @(
     "artifacts_hw6\abliterated_model\*",
     "artifacts_hw6\dpo_model\*",
@@ -153,7 +153,7 @@ Compress-Archive -Path artifacts_hw6 -DestinationPath artifacts_hw6.zip -Force
 
 ```bash
 scp -i ~/.ssh/id_ed25519_dz5_gpu \
-    georgy@100.121.5.55:'C:/Users/Georgy/Source/aith_dl_nlp_hw6/dz_1/dz6/artifacts_hw6.zip' \
+    georgy@100.121.5.55:'C:/Users/Georgy/Source/aith_dl_nlp_hw6/dz6/artifacts_hw6.zip' \
     /Users/georgijmamarin/Desktop/Oplimp/dl_nlp_course/dz_1/dz6/
 unzip -o artifacts_hw6.zip
 ```
