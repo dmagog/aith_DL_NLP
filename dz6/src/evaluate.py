@@ -90,7 +90,9 @@ def refusal_rate(texts: Iterable[str]) -> float:
 class GenConfig:
     """Параметры декодирования — одинаковы для всех замеров (before/after)
     для честного сравнения."""
-    max_new_tokens: int = 256
+    # 192 tokens: refusal-эвристика срабатывает в первых 40-60 tok,
+    # длинный хвост не меняет метрику, но удваивает время генерации.
+    max_new_tokens: int = 192
     do_sample: bool = False  # greedy — чтобы замер был детерминированным
     temperature: float = 0.0
     top_p: float = 1.0

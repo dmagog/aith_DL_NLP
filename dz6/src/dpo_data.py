@@ -42,7 +42,11 @@ class DpoDataConfig:
     # rejected-модель — путь к аблитерированной на диске. Обязателен,
     # заполняется из run_full.py (см. stage_dpo_data).
     rejected_source_dir: str = ""
-    max_new_tokens: int = 256
+    # 128 токенов хватает и для refusal-ответа (короткий), и для
+    # harmful-continuation (обычно укладывается в 60-100 tok).
+    # Раньше было 256 — это вдвое увеличивало generation-время на T4
+    # без выигрыша для DPO-сигнала.
+    max_new_tokens: int = 128
     do_sample: bool = False   # greedy — нужен детерминированный ответ
     seed: int = 42
 
