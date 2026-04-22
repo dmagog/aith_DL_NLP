@@ -14,15 +14,15 @@ Write-Host ("LastRunTime: {0}" -f $info.LastRunTime)
 Write-Host ("LastResult:  {0}" -f $info.LastTaskResult)
 Write-Host ("NextRunTime: {0}" -f $info.NextRunTime)
 
-$here    = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$dz6     = Split-Path -Parent $here
-$logPath = Join-Path $dz6 "artifacts_hw6\logs\run_full.log"
+# Лог живёт на P:\dz6-hw6\artifacts_hw6\logs\run_full.log (см.
+# run_dz6_full.ps1 — артефакты уехали на P: из-за дефицита места на C:).
+$logPath = "P:\dz6-hw6\artifacts_hw6\logs\run_full.log"
 
 if (Test-Path $logPath) {
     $size = (Get-Item $logPath).Length
     Write-Host ""
     Write-Host ("--- last {0} lines of {1} ({2} bytes) ---" -f $Tail, $logPath, $size)
-    Get-Content $logPath -Tail $Tail
+    Get-Content $logPath -Tail $Tail -Encoding UTF8
 } else {
     Write-Host ""
     Write-Host ("log not found yet: {0}" -f $logPath)

@@ -6,9 +6,8 @@ param(
     [switch]$Follow
 )
 
-$here    = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$dz6     = Split-Path -Parent $here
-$logPath = Join-Path $dz6 "artifacts_hw6\logs\run_full.log"
+# Лог на P:\dz6-hw6\artifacts_hw6\logs\run_full.log (см. run_dz6_full.ps1).
+$logPath = "P:\dz6-hw6\artifacts_hw6\logs\run_full.log"
 
 if (-not (Test-Path $logPath)) {
     Write-Host ("log not found yet: {0}" -f $logPath)
@@ -16,7 +15,7 @@ if (-not (Test-Path $logPath)) {
 }
 
 if ($Follow) {
-    Get-Content $logPath -Tail $Tail -Wait
+    Get-Content $logPath -Tail $Tail -Wait -Encoding UTF8
 } else {
-    Get-Content $logPath -Tail $Tail
+    Get-Content $logPath -Tail $Tail -Encoding UTF8
 }

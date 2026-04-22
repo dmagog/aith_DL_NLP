@@ -15,7 +15,15 @@
 | Remote OS        | Windows 11, PowerShell 5.1                              |
 | Remote Python    | `C:\Users\Georgy\miniconda3\envs\dz6-hw6\python.exe`    |
 | Remote repo path | `C:\Users\Georgy\Source\aith_dl_nlp_hw6` (ветка `hw_6`) |
+| Артефакты + HF   | `P:\dz6-hw6\` (на C: не хватает места)                  |
 | GPU              | NVIDIA GeForce RTX 2070, 8 GB, CUDA 12.6 driver         |
+
+На C: у нас ~9 GB свободно, а только fp16-чекпойнт Qwen2.5-1.5B весит
+~3 GB плюс HF-cache самой базовой модели — ещё ~3-4 GB. Поэтому
+артефакты пайплайна и HF-кэш уехали на P: (`artifacts_hw6/`,
+`hf_cache/`). Репозиторий с кодом остаётся на C:. Разделение прошито в
+`scripts/run_dz6_full.ps1` через `$workRoot = "P:\dz6-hw6"` и env-
+переменные `HF_HOME` / `TRANSFORMERS_CACHE`.
 
 Подключение:
 
@@ -133,27 +141,37 @@ $SSH "powershell -NoProfile -File $RPATH\\stop_dz6_full.ps1"
 ## 4. Выгрузка артефактов
 
 После завершения прогона артефакты лежат в
-`C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6\artifacts_hw6\`.
-Нужны только лёгкие артефакты — веса и датасеты не тянем, они
-восстанавливаются с HF Hub / скриптом.
+`P:\dz6-hw6\artifacts_hw6\`. HF-cache (`P:\dz6-hw6\hf_cache\`) не
+тянем — он восстанавливается `transformers`'ом сам. Также не тянем
+полные fp16-веса `abliterated_model` и `dpo_model`: аблитерированная
+база уже на HF Hub (`dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated`), а
+для DPO нам нужен только LoRA-адаптер.
 
 На ремоте:
 
 ```powershell
-cd C:\Users\Georgy\Source\aith_dl_nlp_hw6\dz6
-$exclude = @(
-    "artifacts_hw6\abliterated_model\*",
-    "artifacts_hw6\dpo_model\*",
-    "artifacts_hw6\hf_cache\*"
-)
-Compress-Archive -Path artifacts_hw6 -DestinationPath artifacts_hw6.zip -Force
+cd P:\dz6-hw6
+Compress-Archive `
+    -Path artifacts_hw6 `
+    -DestinationPath artifacts_hw6.zip `
+    -Force
+```
+
+Если zip получается слишком большой (>200 MB) — сначала вырежьте из
+`artifacts_hw6\` папки `abliterated_model\` и `dpo_model\` (полные fp16-
+снэпшоты модели, в репозиторий нам нужен только LoRA-адаптер
+`dpo_adapter\`):
+
+```powershell
+Remove-Item -Recurse -Force artifacts_hw6\abliterated_model
+Remove-Item -Recurse -Force artifacts_hw6\dpo_model
 ```
 
 На локалке:
 
 ```bash
 scp -i ~/.ssh/id_ed25519_dz5_gpu \
-    georgy@100.121.5.55:'C:/Users/Georgy/Source/aith_dl_nlp_hw6/dz6/artifacts_hw6.zip' \
+    georgy@100.121.5.55:'P:/dz6-hw6/artifacts_hw6.zip' \
     /Users/georgijmamarin/Desktop/Oplimp/dl_nlp_course/dz_1/dz6/
 unzip -o artifacts_hw6.zip
 ```
