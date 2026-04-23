@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.ipynb_checkpoints/
+
+# Cache данных/моделей и промежуточные файлы, которые не нужны в git.
+hf_cache/
+data_cache/
+.env
+.env.local
+
+# HF Trainer пишет чекпойнты сюда; мы сохраняем только итоговый LoRA-адаптер
+# и train_log_history в artifacts_hw6/.
+artifacts_hw6/trainer/
+artifacts_hw6/profiler_trace/
+
+# Полный веc аблитерированной модели (~3 ГБ в fp16) — в git не лежит,
+# воспроизводится детерминированно из src/abliterate.py при том же seed.
+artifacts_hw6/abliterated_model/
+
+# Zip для scp-выгрузки — транзитный, коммитить не нужно.
+artifacts_hw6.zip
+
+# Полный лог прогона — машинно-специфичен (пути, progress bars), не нужен.
+artifacts_hw6/logs/

@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "abliteration_harmful": 64,
+  "abliteration_harmless": 64,
+  "eval_harmful": 32,
+  "eval_harmless": 32,
+  "dpo_train": 339,
+  "dpo_val": 85
+}

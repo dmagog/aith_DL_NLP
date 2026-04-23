@@ -1,0 +1,17 @@
+{
+  "best_layer": 13,
+  "n_layers_total": 28,
+  "hidden_dim": 1536,
+  "n_harmful_for_direction": 64,
+  "n_harmless_for_direction": 64,
+  "layer_search_prompts": 8,
+  "layer_search_max_new_tokens": 32,
+  "skip_first_frac": 0.35,
+  "skip_last_frac": 0.2,
+  "weight_orth": {
+    "modified_embed_tokens": true,
+    "modified_o_proj": 28,
+    "modified_down_proj": 28,
+    "direction_norm_before_normalize": 1.0
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "hf_repo_id": "dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated",
+  "seed": 42,
+  "metrics_pretrained": {
+    "refusal_rate_harmful": 0.90625,
+    "refusal_rate_harmless": 0.0,
+    "n_harmful": 32,
+    "n_harmless": 32,
+    "tag": "pretrained"
+  },
+  "metrics_abliterated": {
+    "refusal_rate_harmful": 0.03125,
+    "refusal_rate_harmless": 0.0,
+    "n_harmful": 32,
+    "n_harmless": 32,
+    "tag": "abliterated"
+  },
+  "metrics_dpo": {
+    "refusal_rate_harmful": 0.9375,
+    "refusal_rate_harmless": 0.71875,
+    "n_harmful": 32,
+    "n_harmless": 32,
+    "tag": "dpo"
+  }
+}
