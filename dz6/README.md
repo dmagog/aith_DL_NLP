@@ -16,7 +16,6 @@ refusal на harmful-запросы.
   refusal direction по слоям (`mean(harmful) − mean(harmless)`), runtime-
   ablation для выбора лучшего слоя, weight orthogonalization по
   `embed_tokens`, `o_proj`, `down_proj`;
-- **push в HF Hub** как `dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated`;
 - **DPO-данные**: self-generated пары, где `chosen` — ответ оригинальной
   `Qwen2.5-Instruct`, `rejected` — ответ аблитерированной модели;
 - **QLoRA-DPO**: 4-bit NF4 + LoRA `r=16, α=32` на всех линейных,
@@ -62,12 +61,17 @@ refusal на harmful-запросы.
    текст. Генерим в один проход, greedy, 128 токенов.
 5. **QLoRA-DPO, а не full-parameter DPO**. Модель после DPO используется
    как аблитерированная-база + LoRA-адаптер. LoRA сохраняется отдельно
-   (~20 МБ) и не требует повторного push'а самой модели.
-6. **Windows Scheduled Task, а не nohup**. На remote Windows без sshd-as-
+   (~20 МБ) и коммитится в репо.
+6. **HF push опционален**. Аблитерированная модель детерминированно
+   воспроизводима из `src/abliterate.py` при том же seed (`42`), DPO
+   берёт её с диска, не с Hub. Реальный прогон идёт с `--skip-push`;
+   выложить на Hub — отдельная ручная операция при наличии write-
+   токена, весь остальной пайплайн от неё не зависит.
+7. **Windows Scheduled Task, а не nohup**. На remote Windows без sshd-as-
    service длинный процесс из SSH-сессии умирает при разрыве. Scheduled
    Task живёт независимо, лог пишется построчно, всё мониторится по SSH
    через `status_dz6_full.ps1` / `tail_dz6_full.ps1`.
-7. **Идемпотентные стадии**. Free-tier Colab/SSH обрывается — каждый
+8. **Идемпотентные стадии**. Free-tier Colab/SSH обрывается — каждый
    stage проверяет свой метрик-файл и пропускается, если артефакт уже
    готов. Полный прогон можно перезапустить сколько угодно раз.
 
@@ -83,8 +87,10 @@ refusal на harmful-запросы.
 - `colab_train.ipynb` — раннер для Colab T4;
 - `scripts/` — PS-скрипты Scheduled Task'а DZ6Full (см. REMOTE_GPU.md);
 - `hw6.ipynb` — отчётный ноутбук;
-- `artifacts_hw6/` — зафиксированные артефакты прогона (без весов —
-  модель в HF Hub; LoRA-адаптер ~20 МБ лежит в репо);
+- `artifacts_hw6/` — зафиксированные артефакты прогона (метрики,
+  log_history, eval-сэмплы, LoRA-адаптер DPO ~20 МБ; полные fp16-веса
+  моделей в репо не лежат — abliterated детерминированно
+  воспроизводится из `src/abliterate.py`);
 - `requirements.txt` — зависимости.
 
 ## Установка
@@ -138,14 +144,16 @@ powershell -NoProfile -File .\tail_dz6_full.ps1 -Follow
 python3 -m src.run_full \
     --out artifacts_hw6 \
     --model Qwen/Qwen2.5-1.5B-Instruct \
-    --hf-repo-id dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated \
+    --skip-push \
     --seed 42
 ```
 
 Полезные флаги: `--skip-prepare`, `--skip-eval-pretrained`,
 `--skip-abliterate`, `--skip-eval-abliterated`, `--skip-push`,
 `--skip-dpo-data`, `--skip-dpo-train`, `--skip-eval-dpo` — пропустить
-стадии, если их артефакты уже на диске.
+стадии, если их артефакты уже на диске. Push на HF Hub требует write-
+токена, для сдачи не нужен — пайплайн идёт с `--skip-push`. Если
+понадобится, добавь `--hf-repo-id <ns>/<name>` и убери `--skip-push`.
 
 ## Ноутбук-отчёт
 

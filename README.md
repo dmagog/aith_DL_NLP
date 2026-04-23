@@ -16,5 +16,6 @@
 - [dz6/scripts/](dz6/scripts/) — PS-скрипты Windows Scheduled Task'а
   `DZ6Full`;
 - [dz6/artifacts_hw6/](dz6/artifacts_hw6/) — зафиксированные артефакты
-  прогона, включая LoRA-адаптер DPO. Аблитерированная база — на
-  [HF Hub](https://huggingface.co/dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated).
+  прогона, включая LoRA-адаптер DPO. Аблитерированная база детерминированно
+  воспроизводима из `src/abliterate.py` при том же seed (`42`), поэтому в
+  репо/на Hub она не хранится.

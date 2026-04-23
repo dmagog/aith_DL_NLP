@@ -46,10 +46,15 @@ Add-Content -Path $log -Value ("[hf_home {0}]" -f $env:HF_HOME)       -Encoding 
 # Tee-Object в PS5 не умеет -Encoding, поэтому пишем в лог вручную через
 # Add-Content -Encoding UTF8 и одновременно дублируем на stdout (который
 # в Scheduled Task никто не читает, но пригодится при ручном запуске).
+    # --skip-push: HF push не нужен для сдачи. Аблитерированная модель
+    # воспроизводима из src/abliterate.py при том же seed; локально она
+    # лежит на P: и используется DPO-стадией напрямую с диска. Если
+    # понадобится выложить — у нас будет write-токен и одна команда
+    # huggingface-cli upload, без перезапуска полного прогона.
 & $python -u -m src.run_full `
     --out $artifacts `
     --model "Qwen/Qwen2.5-1.5B-Instruct" `
-    --hf-repo-id "dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated" `
+    --skip-push `
     --seed 42 2>&1 | ForEach-Object {
         $line = [string]$_
         [Console]::Out.WriteLine($line)

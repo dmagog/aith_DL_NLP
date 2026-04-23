@@ -143,9 +143,9 @@ $SSH "powershell -NoProfile -File $RPATH\\stop_dz6_full.ps1"
 После завершения прогона артефакты лежат в
 `P:\dz6-hw6\artifacts_hw6\`. HF-cache (`P:\dz6-hw6\hf_cache\`) не
 тянем — он восстанавливается `transformers`'ом сам. Также не тянем
-полные fp16-веса `abliterated_model` и `dpo_model`: аблитерированная
-база уже на HF Hub (`dmagog/Qwen2.5-1.5B-Instruct-ru-abliterated`), а
-для DPO нам нужен только LoRA-адаптер.
+полные fp16-веса `abliterated_model`: они детерминированно
+воспроизводятся из `src/abliterate.py` при том же seed (`42`), а
+для DPO в репо нужен только LoRA-адаптер `dpo_adapter\` (~20-30 MB).
 
 На ремоте:
 
@@ -157,14 +157,15 @@ Compress-Archive `
     -Force
 ```
 
-Если zip получается слишком большой (>200 MB) — сначала вырежьте из
-`artifacts_hw6\` папки `abliterated_model\` и `dpo_model\` (полные fp16-
-снэпшоты модели, в репозиторий нам нужен только LoRA-адаптер
-`dpo_adapter\`):
+Перед zip-ованием удалите `abliterated_model\` (полный fp16-снэпшот
+~3 GB, нам в репо не нужен — модель воспроизводится из кода). DPO
+сохраняется уже как LoRA-адаптер `dpo_adapter\` (~20-30 MB), его берём
+целиком. Папку `trainer\` (промежуточные чекпойнты HF Trainer) тоже
+выкидываем:
 
 ```powershell
 Remove-Item -Recurse -Force artifacts_hw6\abliterated_model
-Remove-Item -Recurse -Force artifacts_hw6\dpo_model
+Remove-Item -Recurse -Force artifacts_hw6\trainer -ErrorAction SilentlyContinue
 ```
 
 На локалке:
