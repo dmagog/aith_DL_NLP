@@ -1,0 +1,7 @@
+{
+  "refusal_rate_harmful": 0.03125,
+  "refusal_rate_harmless": 0.0,
+  "n_harmful": 32,
+  "n_harmless": 32,
+  "tag": "abliterated"
+}

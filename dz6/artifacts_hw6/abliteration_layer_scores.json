@@ -1,0 +1,50 @@
+[
+  {
+    "layer": 10,
+    "refusal_rate_on_ablate": 1.0
+  },
+  {
+    "layer": 11,
+    "refusal_rate_on_ablate": 1.0
+  },
+  {
+    "layer": 12,
+    "refusal_rate_on_ablate": 0.875
+  },
+  {
+    "layer": 13,
+    "refusal_rate_on_ablate": 0.0
+  },
+  {
+    "layer": 14,
+    "refusal_rate_on_ablate": 0.0
+  },
+  {
+    "layer": 15,
+    "refusal_rate_on_ablate": 0.0
+  },
+  {
+    "layer": 16,
+    "refusal_rate_on_ablate": 0.0
+  },
+  {
+    "layer": 17,
+    "refusal_rate_on_ablate": 0.125
+  },
+  {
+    "layer": 18,
+    "refusal_rate_on_ablate": 0.625
+  },
+  {
+    "layer": 19,
+    "refusal_rate_on_ablate": 0.0
+  },
+  {
+    "layer": 20,
+    "refusal_rate_on_ablate": 0.125
+  },
+  {
+    "layer": 21,
+    "refusal_rate_on_ablate": 0.25
+  }
+]

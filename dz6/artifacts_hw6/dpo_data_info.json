@@ -1,0 +1,9 @@
+{
+  "chosen_source_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "rejected_source_dir": "P:\\dz6-hw6\\artifacts_hw6\\abliterated_model",
+  "n_train_pairs": 339,
+  "n_val_pairs": 85,
+  "max_new_tokens": 128,
+  "do_sample": false,
+  "seed": 42
+}
